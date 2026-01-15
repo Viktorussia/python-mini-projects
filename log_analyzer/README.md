@@ -1,23 +1,22 @@
-# Log Analyzer
+# Log Analyzer (Python)
 
-CLI-утилита для анализа логов (.log/.txt).
+CLI-утилита для анализа лог-файлов.
 
 ## Возможности
-- Подчет INFO/WARNING/ERROR
-- TOP IP адресов
+- Подчет уровней логов (INFO / WARNING / ERROR)
+- TOP IP-адресов
 - TOP ERROR сообщений
 - Фильтр по уровню '--level'
-- Сохраниение отчетов в файл '--out'
+- Сохраниение отчёта в TXT или JSON
 
 ## Запуск
 '''bash
-python loganalyzer.py sample.log
+python log_analyzer.py sample.log
 
-Фильтр по уровню:
+Примеры:
 python log_analizer.py sample.log --level ERROR
-
-Сохранение отчета:
-python log_analizer.py sample.lo --out report.txt
+python log_analizer.py sample.log --top 5
+python log_analizer.py sample.log --json-out report.json
 
 ## ВАЖНО ПО БЕЗОПАСНОСТИ!
 

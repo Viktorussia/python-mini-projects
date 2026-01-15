@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import argparse
 import re
+import json
 from collections import Counter
 from pathlib import Path
+
 
 LEVEL_RE = re.compile(r"\b(INFO|WARNING|ERROR)\b", re.IGNORECASE)
 IP_RE = re.compile(r"(?:\d{1,3}\.){3}\d{1,3}\b")
@@ -29,32 +31,39 @@ def extract_error_message(line: str) -> str | None:
     msg = parts[1].strip(" :-\t")
     return msg if msg else None
 
-def analyze(lines: list[str], level_filter: str | None = None) -> dict:
-    totel = 0
+def analyze(
+    lines: list[str],
+    level_filter: str | None = None,
+    ip_filter: str | None = None
+) -> dict:
     levels = Counter()
     ips = Counter()
     errors = Counter()
+    total = 0
 
     for line in lines:
-        lvl = detect_level(line)
-        if level_filter and lvl != level_filter:
+        if ip_filter and ip_filter not in line:
             continue
 
-        totel += 1
+        level = detect_level(line)
+        if level_filter and level != level_filter:
+            continue
 
-        if lvl:
-            levels[lvl] += 1
+        total += 1
+
+        if level:
+            levels[level] += 1
 
         ip = extract_ip(line)
         if ip:
             ips[ip] += 1
 
-        emsg = extract_error_message(line)
-        if emsg:
-            errors[emsg] += 1
+        msg = extract_error_message(line)
+        if msg:
+            errors[msg] += 1
 
     return {
-        "totel": totel,
+        "total": total,
         "levels": levels,
         "ips": ips,
         "errors": errors,
@@ -63,7 +72,7 @@ def analyze(lines: list[str], level_filter: str | None = None) -> dict:
 def format_report(result: dict, top_n: int = 10) -> str:
     lines = []
     lines.append("=== Log Analuzer Report ===")
-    lines.append(f"Всего строк (с учётом фильтра): {result['totel']}")
+    lines.append(f"Всего строк (с учётом фильтра): {result['total']}")
     lines.append("")
 
     lines.append("Уровни:")
@@ -97,6 +106,8 @@ def main() -> int:
     parser.add_argument("--level", choices=["INFO", "WARNING", "ERROR"], help="Фильтр по уровню")
     parser.add_argument("--top", type=int, default=10, help="Сколько показывать в TOP списках")
     parser.add_argument("--out", help="Куда сохранить отчет (txt)")
+    parser.add_argument("--ip", help="Фильтр: анализировать только строки c этим IP")
+    parser.add_argument("--json-out", help="Сохранить отчет в JSON файл (например report.json)")
 
     args = parser.parse_args()
 
@@ -106,6 +117,11 @@ def main() -> int:
     report = format_report(result, top_n=args.top)
 
     print(report)
+    
+    if args.json_out:
+        json_path = Path(args.json_out)
+        json_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"JSON сохранён в: {json_path}")
 
     if args.out:
         out_path = Path(args.out)
