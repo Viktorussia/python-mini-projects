@@ -1,0 +1,6 @@
+2026-01-14 10:00:01 INFO User login ip=192.168.1.10
+2026-01-14 10:00:05 WARNING Slow response ip=192.168.1.10
+2026-01-14 10:01:11 ERROR Database connection failed ip=10.0.0.5
+2026-01-14 10:01:12 ERROR Database connection failed ip=10.0.0.5
+2026-01-14 10:02:00 INFO Payment processed ip=172.16.0.2
+2026-01-14 10:02:45 ERROR Unauthorized access ip=192.168.1.10
