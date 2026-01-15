@@ -14,8 +14,8 @@ def read_lines(path: Path) -> list[str]:
     return path.read_text(encoding="utf-8", errors="replace").splitlines()
 
 def detect_level(line: str) -> str | None:
-    m = IP_RE.search(line)
-    return m.group(1) if m else None
+    m = LEVEL_RE.search(line)
+    return m.group(1).upper() if m else None
 
 def extract_ip(line: str) -> str | None:
     m = IP_RE.search(line)
