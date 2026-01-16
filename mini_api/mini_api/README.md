@@ -2,9 +2,16 @@
 
 Небольшой REST API на FastAPI.
 
+## Стек
+- Python 3.10+
+- FastAPI
+- Pydantic
+- Uvicorn
+
 ## Запуск
 ```bash
-unicorn app:app --reload
+cd mini_api
+unicorn mini_api.app:app --reload
 
 ## Документация API
 
@@ -16,6 +23,7 @@ unicorn app:app --reload
 ## Примеры
 
 ### Проверка сервера
+**Запрос**
 ```http
 GET /ping
 
