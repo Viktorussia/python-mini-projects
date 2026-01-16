@@ -18,7 +18,7 @@ unicorn app:app --reload
 ### Проверка сервера
 ```http
 GET /ping
-```
+
 **Ответ:**
 ```json
 
@@ -30,7 +30,7 @@ GET /ping
 ### Сложение чисел
 ```http
 POST /sum
-```
+
 **Тело запроса:**
 ```json
 
